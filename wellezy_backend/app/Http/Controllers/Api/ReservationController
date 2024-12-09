@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Reserve;
+use App\Models\Itinerary;
+use App\Models\Passenger;
+use App\Models\Flight; // Asegúrate de importar correctamente el modelo Flight
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+class ReservationController extends Controller
+{
+    public function store(Request $request)
+    {
+        $request->validate([
+            'flightId' => 'required|integer|exists:flights,id',
+            'passengers' => 'required|array|min:1',
+            'passengers.*.firstName' => 'required|string',
+            'passengers.*.lastName' => 'required|string',
+            'passengers.*.age' => 'required|integer|min:0',
+            'passengers.*.passportNumber' => 'required|string',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // Obtener el vuelo seleccionado
+            $flight = Flight::findOrFail($request->flightId);
+
+            // Crear la reserva
+            $reserve = Reserve::create([
+                'flight_id' => $flight->id,
+                'departure_city' => $flight->departure_city,
+                'arrival_city' => $flight->arrival_city,
+                'departure_time' => $flight->departure_time,
+                // Agrega otros campos si es necesario
+            ]);
+
+            // Crear los itinerarios (si es necesario)
+            foreach ($flight->itineraries as $itineraryData) {
+                Itinerary::create([
+                    'reserve_id' => $reserve->id,
+                    'departure_city' => $itineraryData->departure_city,
+                    'arrival_city' => $itineraryData->arrival_city,
+                    'departure_time' => $itineraryData->departure_time,
+                    'arrival_time' => $itineraryData->arrival_time,
+                ]);
+            }
+
+            // Crear los pasajeros
+            foreach ($request->passengers as $passengerData) {
+                Passenger::create([
+                    'reserve_id' => $reserve->id,
+                    'first_name' => $passengerData['firstName'],
+                    'last_name' => $passengerData['lastName'],
+                    'age' => $passengerData['age'],
+                    'passport_number' => $passengerData['passportNumber'],
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'data' => $reserve->load('itineraries', 'passengers'),
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al crear la reserva: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear la reserva. Por favor, intenta nuevamente.',
+            ], 500);
+        }
+    }
+}
