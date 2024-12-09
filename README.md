@@ -158,24 +158,4 @@ El backend estará disponible en `http://localhost:8000`.
 
 El frontend estará disponible en `http://localhost:3000`.
 
-## Uso
 
-- Visita la página principal para obtener información sobre el sistema y acceder a la búsqueda de vuelos.
-- En la página de búsqueda de vuelos, selecciona tus ciudades de salida y llegada, número de pasajeros y otros parámetros, y presiona el botón para obtener los resultados.
-- Una vez que encuentres el vuelo adecuado, puedes realizar una reserva proporcionando los detalles de los pasajeros.
-
-## Contribución
-
-1. Haz un fork del repositorio.
-2. Crea una rama para tu funcionalidad (`git checkout -b feature/nueva-funcionalidad`).
-3. Haz commit de tus cambios (`git commit -am 'Añadir nueva funcionalidad'`).
-4. Empuja los cambios a tu rama (`git push origin feature/nueva-funcionalidad`).
-5. Abre un pull request.
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT - consulta el archivo [LICENSE](LICENSE) para más detalles.
-
----
-
-Este README cubre tanto el backend como el frontend de tu proyecto. Si necesitas realizar algún cambio o agregar más detalles, no dudes en decirme. ¡Buena suerte con tu proyecto!
