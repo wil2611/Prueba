@@ -8,15 +8,39 @@ Este proyecto es una plataforma de reservas de vuelos que permite a los usuarios
 
 El backend está construido en **Laravel** y proporciona una API para interactuar con el frontend. Permite gestionar aeropuertos, vuelos y reservas.
 
-#### Características del Backend:
-- **Aeropuertos:** Obtiene información de los aeropuertos según el código de la ciudad.
-- **Vuelos:** Realiza búsquedas de vuelos según parámetros como ciudades, número de pasajeros y clase de vuelo.
-- **Reservas:** Permite la creación de reservas de vuelos con los detalles de los pasajeros e itinerarios.
+#### **app/**
 
-#### Endpoints:
-- **GET /api/airports:** Obtiene los aeropuertos por código de ciudad.
-- **POST /api/flights:** Busca vuelos según los parámetros especificados.
-- **POST /api/reservations:** Crea una nueva reserva de vuelo.
+- **`Http/Controllers/Api/`**:
+  - **`FlightController.php`**: Controlador que maneja las peticiones relacionadas con vuelos, como la búsqueda de vuelos o la creación de reservas.
+  - **`AirportController.php`**: Controlador que gestiona las peticiones de aeropuertos, como la búsqueda de aeropuertos por código de ciudad.
+
+- **`Http/Requests/`**: Contiene las clases de validación para las solicitudes HTTP, asegurando que los datos enviados sean correctos antes de ser procesados.
+
+- **`Models/`**:
+  - **`Flight.php`**: Modelo que representa un vuelo en la base de datos, con las propiedades como la ciudad de salida, llegada, horario y precio.
+  - **`Itinerary.php`**: Modelo que representa un itinerario de vuelo dentro de una reserva.
+  - **`Reserve.php`**: Modelo que representa una reserva de vuelo, incluyendo los detalles de los vuelos, itinerarios y pasajeros asociados.
+
+- **`Services/`**:
+  - **`ApiService.php`**: Servicio que interactúa con las APIs externas (por ejemplo, para obtener información sobre vuelos y aeropuertos). Este servicio maneja la lógica de negocio relacionada con la comunicación API.
+
+- **`Providers/`**:
+  - **`RouteServiceProvider.php`**: Proveedor de rutas que configura y define las rutas de la aplicación.
+
+#### **config/**
+
+- **`cors.php`**: Archivo de configuración de CORS (Cross-Origin Resource Sharing), que permite que el frontend (que puede estar en un dominio diferente) haga solicitudes al backend.
+- **`database.php`**: Configuración de la base de datos, que incluye parámetros como el tipo de base de datos (MySQL), credenciales y otros ajustes de la conexión.
+
+#### **database/**
+
+- **`migrations/`**:
+  - **`2023_08_01_create_flights_table.php`**: Migración para crear la tabla de vuelos en la base de datos.
+  - **`2023_08_01_create_itineraries_table.php`**: Migración para crear la tabla de itinerarios en la base de datos.
+
+#### **.env**
+
+- **`variables de entorno`**: Este archivo contiene las configuraciones sensibles como las claves de las APIs externas, credenciales de la base de datos y otros valores que no deben ser compartidos públicamente. Se utiliza para configurar el entorno de desarrollo, pruebas y producción.
 
 ### Frontend (React)
 
